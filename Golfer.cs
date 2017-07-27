@@ -1,13 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace HandicapCalculator {
 	public class Golfer {
 		public Golfer(string name) {
             //StreamReader sr = new StreamReader(name);
             //ArrayList scores = new ArrayList();
-            String[] scores = File.ReadAllLines(name);
+            string[] data = File.ReadAllLines(name);
+            string[] scores = new string[20];
+            for(int i = 0; i < data.Length && i < 20; i++) {
+                scores[i] = data[i].Split(',')[0];
+            }
             double handicap = calculateHandicap(scores);
             Console.WriteLine();
             Console.WriteLine("Your Handicap: "+ handicap);
@@ -18,10 +23,13 @@ namespace HandicapCalculator {
             double slope = 120;
             double rating = 72;
             double[] differentials = new double[20];
-            for(int i = 0; i < 20; i++) {
+            int count = 0;
+            for(int i = 0; i < 20 && stringScores[i] != null; i++) {
                 differentials[i] = Convert.ToDouble(stringScores[i]);
                 differentials[i] = ((differentials[i] - rating) * 113) / slope;
+                count += 1;
             }
+            Array.Resize(ref differentials, count);
             Array.Sort(differentials);
             if (differentials.Length < 10) return differentials[0] * .96;
             else if (differentials.Length < 20) {
@@ -29,25 +37,34 @@ namespace HandicapCalculator {
                     return diff * .96;
             }
             else {
-                double sum = 0;
-                for(int i = 0; i < 10; i++) {
-                    sum += differentials[i];
-                }
-                return (sum/10) * .96;
+                double sum = differentials[0] +differentials[1] + differentials[2] + differentials[3] + differentials[4]
+                    + differentials[5] + differentials[6] + differentials[7] + differentials[8] + differentials[9];
+                return (double) (sum/10) * .96;
             }
         }
 
-        public static void updateScores(string[] newScores, string name) {
-            string[] scores = File.ReadAllLines(name);
-            ArrayList concatenate = new ArrayList();
-            concatenate.AddRange(newScores);
-            concatenate.AddRange(scores);
-            String[] newNewScores = (string[])concatenate.ToArray(typeof(string));
+        public static void updateScores(List<string[]> newScores, string name) {
+            string[] data = File.ReadAllLines(name);
+            List<string[]> scores = new List<string[]>();
+            string[] newNewScores = new string[20];
+            for(int i = 0; i < data.Length; i++) {
+                scores.Add(data[i].Split(','));
+            }
+            List<string[]> concatenate = new List<string[]>();
+            for(int i = 0; i < newScores.Count; i++) {
+                concatenate.Add(newScores[i]);
+            }
+            for(int i = 0; i < scores.Count; i++) {
+                concatenate.Add(scores[i]);
+            }
+            for(int i = 0; i < concatenate.Count && i < 20; i++) {
+                newNewScores[i] = concatenate[i][0];
+            }
             double newHandicap = calculateHandicap(newNewScores);
             Console.WriteLine("Your updated handicap is: " + newHandicap);
             StreamWriter sw = new StreamWriter(name);
-            for(int i = 0; i < newNewScores.Length; i++) {
-                sw.WriteLine(newNewScores[i]);
+            for(int i = 0; i < concatenate.Count; i++) {
+                sw.WriteLine(concatenate[i][0] + "," + concatenate[i][1] + "," + concatenate[i][2]);
             }
             sw.Close();
         }

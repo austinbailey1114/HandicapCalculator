@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 namespace HandicapCalculator {
     
     public class HandicapCalculator {
@@ -12,21 +13,20 @@ namespace HandicapCalculator {
             Console.Write("Enter your name: ");
             string name = Console.ReadLine();
             if (s == "yes") {
-                Console.WriteLine("Enter a score followed by 'ENTER' below. Enter 'q' to stop entering scores");
-                ArrayList newPlayerScores = new ArrayList();
+                Console.WriteLine("Enter a score,date,course followed by 'ENTER' below. Enter 'q' to stop entering scores");
+                List<string[]> newPlayerScores = new List<string[]>();
                 while (true) {
-                    Console.Write("Score: ");
-                    string score = Console.ReadLine();
-                    if (score == "q") break;
+                    Console.Write("Enter here (score,date,course: ");
+                    string[] score = Console.ReadLine().Split(',');
+                    if (score[0] == "q") break;
                     newPlayerScores.Add(score);
                 }
                 if(newPlayerScores.Count < 5) {
                     Console.WriteLine("You need at least five scores to calculate a handicap!");
                 }
-                String[] scores = (string[])newPlayerScores.ToArray(typeof(string));
                 StreamWriter sw = File.CreateText(name + ".txt");
-                for(int i = 0; i < scores.Length; i++) {
-                    sw.WriteLine(scores[i]);
+                for(int i = 0; i < newPlayerScores.Count; i++) {
+                    sw.WriteLine(newPlayerScores[i][0] + "," + newPlayerScores[i][1] + "," +newPlayerScores[i][2]);
                 }
                 sw.Close();
                 Golfer newPlayer = new Golfer(name + ".txt");
@@ -40,16 +40,15 @@ namespace HandicapCalculator {
                 string addQuit = Console.ReadLine();
                 if (addQuit == "quit") break;
                 if (addQuit == "add") {
-                    ArrayList newScores = new ArrayList();
-                    Console.WriteLine("Enter a score followed by 'ENTER' below. Enter 'q' to stop entering scores");
+                    List<string[]>newScores = new List<string[]>();
+                    Console.WriteLine("Enter a score,date,course followed by 'ENTER' below. Enter 'q' to stop entering scores");
                     while(true){
-                        Console.Write("Score: ");
-                        string score = Console.ReadLine();
-                        if (score == "q") break;
+                        Console.Write("Enter here (score,date,course: ");
+                        string[] score = Console.ReadLine().Split(',');
+                        if (score[0] == "q") break;
                         newScores.Add(score);
                     }
-                    String[] scores = (string[])newScores.ToArray(typeof(string));
-                    Golfer.updateScores(scores, name + ".txt");
+                    Golfer.updateScores(newScores, name + ".txt");
 
                 }
             }
