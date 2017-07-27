@@ -7,17 +7,18 @@ namespace HandicapCalculator {
 		public Golfer(string name) {
             //StreamReader sr = new StreamReader(name);
             //ArrayList scores = new ArrayList();
-            string[] scores = File.ReadAllLines(name);
+            String[] scores = File.ReadAllLines(name);
             double handicap = calculateHandicap(scores);
-            Console.WriteLine(handicap);
+            Console.WriteLine();
+            Console.WriteLine("Your Handicap: "+ handicap);
 		}
 
-        public double calculateHandicap(string[] stringScores) {
+        public static double calculateHandicap(string[] stringScores) {
             /* Calculates handicap assuming a slope of 120 and rating of 72 */
             double slope = 120;
             double rating = 72;
-            double[] differentials = new double[stringScores.Length];
-            for(int i = 0; i < stringScores.Length; i++) {
+            double[] differentials = new double[20];
+            for(int i = 0; i < 20; i++) {
                 differentials[i] = Convert.ToDouble(stringScores[i]);
                 differentials[i] = ((differentials[i] - rating) * 113) / slope;
             }
@@ -33,13 +34,24 @@ namespace HandicapCalculator {
                     sum += differentials[i];
                 }
                 return (sum/10) * .96;
-
             }
-
-
-
-
         }
+
+        public static void updateScores(string[] newScores, string name) {
+            string[] scores = File.ReadAllLines(name);
+            ArrayList concatenate = new ArrayList();
+            concatenate.AddRange(newScores);
+            concatenate.AddRange(scores);
+            String[] newNewScores = (string[])concatenate.ToArray(typeof(string));
+            double newHandicap = calculateHandicap(newNewScores);
+            Console.WriteLine("Your updated handicap is: " + newHandicap);
+            StreamWriter sw = new StreamWriter(name);
+            for(int i = 0; i < newNewScores.Length; i++) {
+                sw.WriteLine(newNewScores[i]);
+            }
+            sw.Close();
+        }
+
 
 
 	}
