@@ -33,9 +33,14 @@ namespace HandicapCalculator {
                     sw.WriteLine(scores[i]);
                 }
                 sw.Close();
-               
-                }
+                Golfer newPlayer = new Golfer(name + ".txt");
+            }
+            else if (s == "no") {
+                Console.Write("Enter your name: ");
+                string name = Console.ReadLine();
+                Golfer player = new Golfer(name + ".txt");
             }
         }
     }
+}
 
