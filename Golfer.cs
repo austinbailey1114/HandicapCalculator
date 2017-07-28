@@ -61,6 +61,7 @@ namespace HandicapCalculator {
                 newNewScores[i] = concatenate[i][0];
             }
             double newHandicap = calculateHandicap(newNewScores);
+            Console.WriteLine();
             Console.WriteLine("Your updated handicap is: " + newHandicap);
             StreamWriter sw = new StreamWriter(name);
             for(int i = 0; i < concatenate.Count; i++) {
@@ -69,7 +70,34 @@ namespace HandicapCalculator {
             sw.Close();
         }
 
+        public static void searchDate(string date, string name) {
+            Console.WriteLine();
+            Console.WriteLine("Score(s) shot on " + date + ": ");
+            string[] data = File.ReadAllLines(name);
+            List<string[]> scores = new List<string[]>();
+            for(int i = 0; i < data.Length; i++) {
+                scores.Add(data[i].Split(','));
+            }
+            for(int i = 0; i < scores.Count; i++) {
+                if(scores[i][1] == date) {
+                    Console.WriteLine(scores[i][0] + " at " + scores[i][2]);
+                }
+            }
+        }
 
-
+        public static void searchCourse(string course, string name) {
+            Console.WriteLine();
+            Console.WriteLine("Score(s) shot at " + course + ": ");
+            string[] data = File.ReadAllLines(name);
+            List<string[]> scores = new List<string[]>();
+            for(int i = 0; i < data.Length; i++) {
+                scores.Add(data[i].Split(','));
+            }
+            for(int i = 0; i < scores.Count; i++) {
+                if(scores[i][2] == course) {
+                    Console.WriteLine(scores[i][0] + " on " + scores[i][1]);
+                }
+            }
+        }
 	}
 }

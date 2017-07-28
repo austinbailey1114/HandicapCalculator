@@ -16,7 +16,7 @@ namespace HandicapCalculator {
                 Console.WriteLine("Enter a score,date,course followed by 'ENTER' below. Enter 'q' to stop entering scores");
                 List<string[]> newPlayerScores = new List<string[]>();
                 while (true) {
-                    Console.Write("Enter here (score,date,course: ");
+                    Console.Write("Enter here (score,date,course): ");
                     string[] score = Console.ReadLine().Split(',');
                     if (score[0] == "q") break;
                     newPlayerScores.Add(score);
@@ -36,14 +36,13 @@ namespace HandicapCalculator {
             }
             while(true) {
                 Console.WriteLine();
-                Console.Write("Would you like to add new scores, or quit the program? (add/quit): ");
-                string addQuit = Console.ReadLine();
-                if (addQuit == "quit") break;
-                if (addQuit == "add") {
+                Console.Write("Would you like to add new scores or look up previous scores? (add/lookup) (q to quit): ");
+                string addLookup = Console.ReadLine();
+                if (addLookup == "add") {
                     List<string[]>newScores = new List<string[]>();
                     Console.WriteLine("Enter a score,date,course followed by 'ENTER' below. Enter 'q' to stop entering scores");
                     while(true){
-                        Console.Write("Enter here (score,date,course: ");
+                        Console.Write("Enter here (score,date,course): ");
                         string[] score = Console.ReadLine().Split(',');
                         if (score[0] == "q") break;
                         newScores.Add(score);
@@ -51,8 +50,14 @@ namespace HandicapCalculator {
                     Golfer.updateScores(newScores, name + ".txt");
 
                 }
+                else if (addLookup == "lookup") {
+                    Console.Write("Search by course name or date of round: ");
+                    string input = Console.ReadLine();
+                    if (input.Contains("/")) Golfer.searchDate(input, name + ".txt");
+                    else Golfer.searchCourse(input, name + ".txt");
+                }
+                else if (addLookup == "q") break;
             }
         }
     }
 }
-
