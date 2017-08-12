@@ -4,7 +4,7 @@ HandicapCalculator is an application to be run in console of your IDE. It tracks
 It tracks multiple users' data by storing their previous scores in a .txt file. The user inputs score, date, and golf course.
 The user is also prompted to either add new scores, look up previous scores based on date or course played at, or quit the application.
 ### How to use it ###
-`git clone` the repository, run `HandicapCalculator.cs`, and follow the command line prompts.  
+Clone the repository, run `HandicapCalculator.cs`, and follow the command line prompts.  
 ### Example Output ###
 Are you a new player? (yes/no): yes
 
